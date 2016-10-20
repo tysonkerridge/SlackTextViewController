@@ -833,6 +833,11 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     // No implementation here. Meant to be overriden in subclass.
 }
 
+- (void)didPasteText
+{
+    // No implementation here. Meant to be overriden in subclass.
+}
+
 - (void)willRequestUndo
 {
     NSString *title = NSLocalizedString(@"Undo Typing", nil);
@@ -1530,6 +1535,16 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     if (notification.userInfo) {
         [self didPasteMediaContent:notification.userInfo];
     }
+}
+
+- (void)slk_didPasteText:(NSNotification *)notification
+{
+    // Skips this if it's not the expected textView.
+    if (![self.textView isFirstResponder]) {
+        return;
+    }
+
+    [self didPasteText];
 }
 
 - (void)slk_didShakeTextView:(NSNotification *)notification
@@ -2282,6 +2297,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewContentSize:) name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewSelectedRange:) name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(slk_didChangeTextViewPasteboard:) name:SLKTextViewDidPasteItemNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(slk_didPasteText:) name:SLKTextViewDidPasteTextNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(slk_didShakeTextView:) name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
@@ -2315,6 +2331,7 @@ CGFloat const SLKAutoCompletionViewDefaultHeight = 140.0;
     [notificationCenter removeObserver:self name:SLKTextViewContentSizeDidChangeNotification object:nil];
     [notificationCenter removeObserver:self name:SLKTextViewSelectedRangeDidChangeNotification object:nil];
     [notificationCenter removeObserver:self name:SLKTextViewDidPasteItemNotification object:nil];
+    [notificationCenter removeObserver:self name:SLKTextViewDidPasteTextNotification object:nil];
     [notificationCenter removeObserver:self name:SLKTextViewDidShakeNotification object:nil];
     
     // Application notifications
