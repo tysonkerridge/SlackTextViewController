@@ -76,6 +76,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
     _dynamicTypeEnabled = YES;
 
     self.undoManagerEnabled = YES;
+    _shouldRemoveUndoManagerActionsOnResign = YES;
     
     self.editable = YES;
     self.selectable = YES;
@@ -579,7 +580,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 - (BOOL)canResignFirstResponder
 {
     // Removes undo/redo items
-    if (self.undoManagerEnabled) {
+    if (self.undoManagerEnabled && _shouldRemoveUndoManagerActionsOnResign) {
         [self.undoManager removeAllActions];
     }
     

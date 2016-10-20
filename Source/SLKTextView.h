@@ -81,6 +81,10 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 /** YES if the text view supports undoing, either using UIMenuController, or with ctrl+z when using an external keyboard. Default is YES. */
 @property (nonatomic, readwrite) BOOL undoManagerEnabled;
 
+/** YES if the text view deletes its undo actions when it resigns first responder. Default is YES. 
+ Requires undoManagerEnabled be YES to have any effect. Anything which resigns responder will delete actions, such as showing an Alert temporarily. */
+@property (nonatomic, readwrite) BOOL shouldRemoveUndoManagerActionsOnResign;
+
 /** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
 @property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
 
