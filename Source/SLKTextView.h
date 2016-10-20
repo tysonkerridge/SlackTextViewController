@@ -94,6 +94,10 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 /** The custom menu controller items added to the menu controller, such as undo and redo. Default is All. */
 @property (nonatomic) SLKMenuControllerItem menuControllerItems;
 
+/** YES if the text view deletes its undo actions when it resigns first responder. Default is YES. 
+ Requires undoManagerEnabled be YES to have any effect. Anything which resigns responder will delete actions, such as showing an Alert temporarily. */
+@property (nonatomic, readwrite) BOOL shouldRemoveUndoManagerActionsOnResign;
+
 /** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
 @property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
 
