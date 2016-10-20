@@ -73,6 +73,7 @@ static NSString *const SLKTextViewGenericFormattingSelectorPrefix = @"slk_format
 - (void)slk_commonInit
 {
     _pastableMediaTypes = SLKPastableMediaTypeNone;
+    _menuControllerItems = SLKMenuControllerItemAll;
     _dynamicTypeEnabled = YES;
 
     self.undoManagerEnabled = YES;
@@ -723,11 +724,40 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 - (void)slk_addCustomMenuControllerItems
 {
-    UIMenuItem *undo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
-    UIMenuItem *redo = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
-    UIMenuItem *format = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Format", nil) action:@selector(slk_presentFormattingMenu:)];
+    SLKMenuControllerItem menuControllerItems = self.menuControllerItems;
+
+    if (menuControllerItems == SLKMenuControllerItemNone) {
+        return;
+    }
+
+    NSMutableArray *menuItems = [NSMutableArray new];
+
+    if (menuControllerItems & SLKMenuControllerItemUndo) {
+        [menuItems addObject:UIMenuItemFromSLKMenuControllerItem(SLKMenuControllerItemUndo)];
+    }
+    if (menuControllerItems & SLKMenuControllerItemRedo) {
+        [menuItems addObject:UIMenuItemFromSLKMenuControllerItem(SLKMenuControllerItemRedo)];
+    }
+    if (menuControllerItems & SLKMenuControllerItemFormat) {
+        [menuItems addObject:UIMenuItemFromSLKMenuControllerItem(SLKMenuControllerItemFormat)];
+    }
     
-    [[UIMenuController sharedMenuController] setMenuItems:@[undo, redo, format]];
+    [[UIMenuController sharedMenuController] setMenuItems:menuItems];
+}
+
+UIMenuItem *UIMenuItemFromSLKMenuControllerItem(SLKMenuControllerItem item)
+{
+    if (item == SLKMenuControllerItemUndo) {
+        return [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Undo", nil) action:@selector(slk_undo:)];
+    }
+    if (item == SLKMenuControllerItemRedo) {
+        return [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Redo", nil) action:@selector(slk_redo:)];
+    }
+    if (item == SLKMenuControllerItemFormat) {
+        return [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"Format", nil) action:@selector(slk_presentFormattingMenu:)];
+    }
+
+    return nil;
 }
 
 - (void)slk_undo:(id)sender

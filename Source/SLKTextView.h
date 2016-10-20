@@ -22,6 +22,15 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeAll         = SLKPastableMediaTypeImages|SLKPastableMediaTypeMOV
 };
 
+typedef NS_OPTIONS(NSUInteger, SLKMenuControllerItem) {
+    SLKMenuControllerItemNone       = 0,
+    SLKMenuControllerItemUndo       = 1 << 0,
+    SLKMenuControllerItemRedo       = 1 << 1,
+    SLKMenuControllerItemFormat     = 1 << 2,
+    SLKMenuControllerItemUndoRedo   = SLKMenuControllerItemUndo|SLKMenuControllerItemRedo,
+    SLKMenuControllerItemAll        = SLKMenuControllerItemUndoRedo|SLKMenuControllerItemFormat
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 UIKIT_EXTERN NSString * const SLKTextViewTextWillChangeNotification;
@@ -80,6 +89,9 @@ UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 
 /** YES if the text view supports undoing, either using UIMenuController, or with ctrl+z when using an external keyboard. Default is YES. */
 @property (nonatomic, readwrite) BOOL undoManagerEnabled;
+
+/** The custom menu controller items added to the menu controller, such as undo and redo. Default is All. */
+@property (nonatomic) SLKMenuControllerItem menuControllerItems;
 
 /** YES if the font size should dynamically adapt based on the font sizing option preferred by the user. Default is YES. */
 @property (nonatomic, getter=isDynamicTypeEnabled) BOOL dynamicTypeEnabled;
