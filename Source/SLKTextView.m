@@ -15,6 +15,7 @@ NSString * const SLKTextViewTextWillChangeNotification =            @"SLKTextVie
 NSString * const SLKTextViewContentSizeDidChangeNotification =      @"SLKTextViewContentSizeDidChangeNotification";
 NSString * const SLKTextViewSelectedRangeDidChangeNotification =    @"SLKTextViewSelectedRangeDidChangeNotification";
 NSString * const SLKTextViewDidPasteItemNotification =              @"SLKTextViewDidPasteItemNotification";
+NSString * const SLKTextViewDidPasteTextNotification =              @"SLKTextViewDidPasteTextNotification";
 NSString * const SLKTextViewDidShakeNotification =                  @"SLKTextViewDidShakeNotification";
 
 NSString * const SLKTextViewPastedItemContentType =                 @"SLKTextViewPastedItemContentType";
@@ -658,6 +659,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         // Inserting the text fixes a UITextView bug whitch automatically scrolls to the bottom
         // and beyond scroll content size sometimes when the text is too long
         [self slk_insertTextAtCaretRange:pastedItem];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteTextNotification object:nil userInfo:nil];
     }
 }
 
